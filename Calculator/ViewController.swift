@@ -24,7 +24,7 @@ class ViewController: UIViewController {
                 display.text = textCurrentlyInDisplay + digit
             }
         } else {
-            display.text = digit
+            display.text = digit == "." ? "0." : digit
             userIsInTheMiddleOfTyping = true
         }
     }
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         set {
             display.text = String(newValue)
         }
-    }
+    } 
     
     
     private var brain = CalculatorBrain()
@@ -54,6 +54,13 @@ class ViewController: UIViewController {
         if let result = brain.result {
             displayValue = result
         }
+        
+        if sender.currentTitle! == "c" {
+            displayValue = 0
+            brain.performOperation("clear")
+            userIsInTheMiddleOfTyping = false
+        }
+        
     }
     
     
