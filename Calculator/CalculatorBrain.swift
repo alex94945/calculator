@@ -32,7 +32,9 @@ struct CalculatorBrain {
         "+" : Operation.binaryOperation({ $0 + $1 }),
         "-" : Operation.binaryOperation({ $0 - $1 }),
         "=" : Operation.equals,
-        "c" : Operation.clear
+        "c" : Operation.clear,
+        "xⁿ" : Operation.binaryOperation({ pow($0, $1) }),
+        "1/x" : Operation.unaryOperation({ 1 / $0 })
     ]
     
     mutating func performOperation(_ symbol: String) {
@@ -53,6 +55,7 @@ struct CalculatorBrain {
                 performPendingBinaryOperation()
             case .clear:
                 accumulator = nil
+                pendingBinaryOperation = nil
             }
         }
     }
@@ -66,6 +69,10 @@ struct CalculatorBrain {
     
     private var pendingBinaryOperation: PendingBinaryOperation?
     
+    private var resultIsPending: Bool {
+        return pendingBinaryOperation != nil
+    }
+
     private struct PendingBinaryOperation {
         let function: (Double, Double) -> Double
         let firstOperand: Double
